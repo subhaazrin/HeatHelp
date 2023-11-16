@@ -1,14 +1,30 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../../components/EditScreenInfo';
+import React from 'react';
+import { StyleSheet, Pressable } from 'react-native';
 import { Text, View } from '../../components/Themed';
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+      <Text style={styles.title}>Diagnose and Treat Yourself!</Text>
+      <Text style={styles.description}>
+        Click the button below to begin your self-assessment.
+      </Text>
+
+      {/* Improved styled button using TouchableOpacity for feedback */}
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#2a5d72' : '#3498db' },
+        ]}
+        onPress={() => alert('Taking you to the survey')}>
+        <Text style={styles.buttonText}>Start Assessment</Text>
+      </Pressable>
+
+      {/* Separator */}
+      <View style={styles.separator} />
+
+      {/* You can keep the EditScreenInfo component if needed */}
+      {/* <EditScreenInfo path="app/(tabs)/two.tsx" /> */}
     </View>
   );
 }
@@ -18,14 +34,35 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: 'yellow',
+  },
+  button: {
+    backgroundColor: '#3498db',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+    elevation: 3,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
     fontWeight: 'bold',
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 20,
     height: 1,
     width: '80%',
+    backgroundColor: '#ccc',
   },
 });
