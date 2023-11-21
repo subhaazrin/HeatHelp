@@ -1,8 +1,44 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import { Text, View } from '../../components/Themed';
+import { Configuration, OpenAIApi } from "openai"; //for chatgpt
+
+const OPENAI_API_KEY = "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";
+//https://platform.openai.com/docs/api-reference/introduction
+
 
 export default function TabTwoScreen() {
+  const [loading, setLoading] = useState(false);
+  const [answer, setAnswer] = useState('');
+
+  const beginRequest = async () => {
+    setLoading(true);
+
+    const configuration = new Configuration({
+      apiKey: OPENAI_API_KEY,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    try {
+      const completion = await openai.chat.completions.create({
+        messages: [{ role: "system", content: "we have intense heat and high temperature. I am getting stomach aches. How to treat?" }],
+        model: "gpt-3.5-turbo-1106",
+      });
+      setAnswer(completion.choices[0]); 
+      console.log(completion.data.choices[0].text);
+    } catch (error) {
+      setAnswer('An error occurred while processing your request.');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    beginRequest();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Diagnose and Treat Yourself!</Text>
@@ -16,7 +52,7 @@ export default function TabTwoScreen() {
           styles.button,
           { backgroundColor: pressed ? '#2a5d72' : '#3498db' },
         ]}
-        onPress={() => alert('Taking you to the survey')}>
+        onPress={() => alert(answer)}>
         <Text style={styles.buttonText}>Start Assessment</Text>
       </Pressable>
 
